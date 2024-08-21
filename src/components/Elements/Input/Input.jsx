@@ -5,6 +5,7 @@ const Input = ({ type, placeholder, name }) => {
       name={name}
       className="text-sm border rounded-sm w-full text-slate-700 placeholder:opacity-50 py-2 px-3"
       placeholder={placeholder}
+      id={name}
     />
   );
 };

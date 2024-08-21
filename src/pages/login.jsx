@@ -1,10 +1,10 @@
-import FormRegister from "../components/Fragments/FormRegister";
+import FormLogin from "../components/Fragments/FormLogin";
 import AuthLayouts from "../components/Layouts/AuthLayouts";
 
 const LoginPage = () => {
   return (
-    <AuthLayouts title="Register">
-      <FormRegister />
+    <AuthLayouts title="Login" type={"login"}>
+      <FormLogin />
     </AuthLayouts>
   );
 };
