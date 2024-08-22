@@ -81,8 +81,8 @@ const ProductsPage = () => {
           Logout
         </Button>
       </div>
-      <div className="flex justify-center py-5">
-        <div className="w-3/4 flex flex-wrap">
+      <div className="flex justify-center py-5 gap-10">
+        <div className="w-3/4 grid grid-cols-3 gap-2">
           {products.map((product) => (
             <CardProduct key={product.id}>
               <CardProduct.Header imgURL={product.imgURL} />
@@ -99,13 +99,13 @@ const ProductsPage = () => {
         </div>
         <div className="w-1/4">
           <h1 className="text-3xl font-bold text-blue-600">Cart</h1>
-          <table className="text-left table-auto border-separate border-spacing-x-5">
+          <table className="text-left table-auto border-collapse border border-slate-500">
             <thead>
               <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
+                <th className="border border-slate-600 ">Product</th>
+                <th className="px-2 border border-slate-600 ">Price</th>
+                <th className="px-2 border border-slate-600 ">Quantity</th>
+                <th className="border border-slate-600 ">Total</th>
               </tr>
             </thead>
             <tbody>
@@ -115,10 +115,16 @@ const ProductsPage = () => {
                 );
                 return (
                   <tr key={item.id}>
-                    <td>{product.title}</td>
-                    <td>{product.price}</td>
-                    <td>{item.qty}</td>
-                    <td>{product.price * item.qty}</td>
+                    <td className="border border-slate-600 ">
+                      {product.title}
+                    </td>
+                    <td className="px-2 border border-slate-600">
+                      {product.price}
+                    </td>
+                    <td className="px-2 border border-slate-600">{item.qty}</td>
+                    <td className="border border-slate-600 ">
+                      {product.price * item.qty}
+                    </td>
                   </tr>
                 );
               })}
