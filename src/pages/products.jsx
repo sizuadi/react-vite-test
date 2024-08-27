@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Elements/Button";
 import CardProduct from "../components/Elements/CardProduct";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { currencyIDR } from "../utils/helper";
 const products = [
   {
     id: 1,
@@ -49,12 +50,8 @@ const ProductsPage = () => {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
 
-  const [cart, setCart] = useState([
-    {
-      id: 1,
-      qty: 1,
-    },
-  ]);
+  const [cart, setCart] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const handleLogout = () => {
     localStorage.removeItem("email");
@@ -64,14 +61,40 @@ const ProductsPage = () => {
   };
 
   const handleAddToCart = (id) => {
-    setCart([
-      ...cart,
-      {
-        id: id,
-        qty: 1,
-      },
-    ]);
+    if (cart.length > 0 && cart.find((item) => item.id === id)) {
+      setCart(
+        cart.map((item) =>
+          item.id === id ? { ...item, qty: item.qty + 1 } : item
+        )
+      );
+    } else {
+      if (cart.length > 0) {
+        setCart([...cart, { id, qty: 1 }]);
+      } else {
+        setCart([{ id, qty: 1 }]);
+      }
+    }
   };
+
+  useEffect(() => {
+    setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
+  }, []);
+
+  useEffect(() => {
+    if (cart.length > 0) {
+      const sum = cart.reduce((acc, item) => {
+        const product = products.find((p) => p.id === item.id);
+        return acc + product.price * item.qty;
+      }, 0);
+      setTotalPrice(sum);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      totalPriceRef.current.style.display = "table-row";
+    } else {
+      totalPriceRef.current.style.display = "none";
+    }
+  }, [cart]);
+
+  const totalPriceRef = useRef(null);
 
   return (
     <>
@@ -109,25 +132,36 @@ const ProductsPage = () => {
               </tr>
             </thead>
             <tbody>
-              {cart.map((item) => {
-                const product = products.find(
-                  (product) => product.id === item.id
-                );
-                return (
-                  <tr key={item.id}>
-                    <td className="border border-slate-600 ">
-                      {product.title}
-                    </td>
-                    <td className="px-2 border border-slate-600">
-                      {product.price}
-                    </td>
-                    <td className="px-2 border border-slate-600">{item.qty}</td>
-                    <td className="border border-slate-600 ">
-                      {product.price * item.qty}
-                    </td>
-                  </tr>
-                );
-              })}
+              {cart.length > 0 &&
+                cart.map((item) => {
+                  const product = products.find(
+                    (product) => product.id === item.id
+                  );
+                  return (
+                    <tr key={item.id}>
+                      <td className="border border-slate-600 ">
+                        {product.title}
+                      </td>
+                      <td className="px-2 border border-slate-600">
+                        {currencyIDR(product.price)}
+                      </td>
+                      <td className="px-2 border border-slate-600">
+                        {item.qty}
+                      </td>
+                      <td className="border border-slate-600 ">
+                        {currencyIDR(product.price * item.qty)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              <tr ref={totalPriceRef}>
+                <td className="border border-slate-600" colSpan={3}>
+                  Total
+                </td>
+                <td className="border border-slate-600">
+                  {currencyIDR(totalPrice)}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
