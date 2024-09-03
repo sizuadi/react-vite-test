@@ -1,4 +1,10 @@
-export function truncateText(text, maxLength = 20) {
+export function truncateText(text, maxLength = 17) {
+  const words = text.split(" ");
+  return words.length > maxLength
+    ? words.slice(0, maxLength).join(" ") + "..."
+    : text;
+}
+export function truncateTitle(text, maxLength = 6) {
   const words = text.split(" ");
   return words.length > maxLength
     ? words.slice(0, maxLength).join(" ") + "..."

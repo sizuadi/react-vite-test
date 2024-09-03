@@ -1,4 +1,4 @@
-import { currencyIDR, truncateText } from "../../../utils/helper";
+import { currencyIDR, truncateText, truncateTitle } from "../../../utils/helper";
 import Button from "../Button";
 
 const CardProduct = ({ children }) => {
@@ -25,7 +25,7 @@ const Body = ({ children, title }) => {
   return (
     <div className="px-5 pb-5">
       <h5 className="text-lg font-semibold tracking-tight text-white mb-2">
-        {title}
+        {truncateTitle(title)}
       </h5>
       <p className="text-xs text-white text-justify">
         {truncateText(children)}
