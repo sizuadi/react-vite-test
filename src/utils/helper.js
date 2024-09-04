@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+
 export function truncateText(text, maxLength = 17) {
   const words = text.split(" ");
   return words.length > maxLength
@@ -17,4 +19,8 @@ export function currencyIDR(number) {
     style: "currency",
     currency: "USD",
   }).format(number);
+}
+
+export function getUsername(token) {
+  return jwtDecode(token, { complete: true }).user ?? "";
 }

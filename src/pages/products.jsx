@@ -2,20 +2,19 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/Elements/Button";
 import CardProduct from "../components/Elements/CardProduct";
 import { useEffect, useRef, useState } from "react";
-import { currencyIDR, truncateTitle } from "../utils/helper";
+import { currencyIDR, getUsername, truncateTitle } from "../utils/helper";
 import { getProducts } from "../services/product.service";
 
 const ProductsPage = () => {
   const navigate = useNavigate();
-  const email = localStorage.getItem("email");
+  const [username, setUsername] = useState("");
 
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
   const handleLogout = () => {
-    localStorage.removeItem("email");
-    localStorage.removeItem("password");
+    localStorage.removeItem("token");
 
     navigate("/login");
   };
@@ -35,6 +34,16 @@ const ProductsPage = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return
+    }
+    setUsername(getUsername(token));
+  }, [navigate])
+
 
   useEffect(() => {
     getProducts((products) => {
@@ -62,7 +71,7 @@ const ProductsPage = () => {
   return (
     <>
       <div className="flex justify-end h-20 bg-blue-600 text-white items-center px-10">
-        {email}
+        {username}
         <Button variant="bg-black ml-5" onClick={handleLogout}>
           Logout
         </Button>
